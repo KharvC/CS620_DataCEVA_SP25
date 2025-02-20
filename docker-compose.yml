@@ -9,6 +9,7 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+      - ./create.sql:/docker-entrypoint-initdb.d/create.sql:ro
 
 volumes:
   db_data:
