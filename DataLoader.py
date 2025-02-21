@@ -11,7 +11,7 @@ ofst = 0
     results is a list of dictionaries
 '''
 while (check):
-    results = client.get("cc6f-sgik", limit=50000, offset = 50000*ofst)
+    results = client.get("cc6f-sgik", limit=10000, offset = 10000*ofst)
     print(ofst)
     if (len(results) == 0):
         check = False
