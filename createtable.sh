@@ -1,11 +1,11 @@
 #!/bin/bash
 
+# Starts the MySQL service
+docker-compose up -d
+
 # Installs sodapy and mysql connector for Python
 pip install sodapy
 pip install mysql-connector-python
-
-# Starts the MySQL service
-docker-compose up -d
 
 # Makes sure that enough time has been given to MySQL sevice to be set up
 sleep 7
