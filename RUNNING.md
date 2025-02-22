@@ -1,4 +1,4 @@
-Database:
+**Database:**
 
 Run these commands to get the data loaded:
 1. `docker-compose down -v` (optional: run this only if you had docker up before the final merge)
