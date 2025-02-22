@@ -4,14 +4,26 @@ services:
   db:
     image: mysql/mysql-server:latest
     container_name: liquor_sales_IA_db
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: cs620ibdc1234
       MYSQL_DATABASE: IowaLiquorSales
+      MYSQL_ROOT_HOST: '%'
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
       - ./create.sql:/docker-entrypoint-initdb.d/create.sql:ro
-      
+
+  dataloader:
+    build: .
+    container_name: dataloader
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+    command: python DataLoader.py
+
 volumes:
   db_data:
+
