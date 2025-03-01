@@ -1,6 +1,6 @@
 import time
 from sodapy import Socrata
-import mysql.connector
+import psycopg2
 
 def safe_int(val):
     """Convert value to int safely; returns None if conversion fails."""
@@ -24,12 +24,12 @@ time.sleep(30)
 client = Socrata("data.iowa.gov", None)
 
 # Connect to MySQL
-print("Attempting to connect to MySQL...")
-db_conn = mysql.connector.connect(
+print("Attempting to connect to PostgreSQL...")
+db_conn = psycopg2.connect(
     host="db",
-    user="root",
-    password="cs620ibdc1234",
-    database="IowaLiquorSales"
+    user="root",                 
+    password="cs620ibdc1234",         
+    dbname="IowaLiquorSales"       
 )
 cursor = db_conn.cursor()
 
