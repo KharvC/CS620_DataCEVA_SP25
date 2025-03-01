@@ -73,25 +73,32 @@ while check:
         sale_liters       = safe_float(row.get("sale_liters", None))
         sale_gallons      = safe_float(row.get("sale_gallons", None))
         
-        # Process store_location as a WKT string
+        
         location_data = row.get("store_location", None)
-        if isinstance(location_data, dict) and "coordinates" in location_data:
-            coords = location_data["coordinates"]
-            if len(coords) == 2:
-                # Socrata returns coordinates as [longitude, latitude]
-                lon = safe_float(coords[0])
-                lat = safe_float(coords[1])
-                if lon is not None and lat is not None:
-                    wkt = f"POINT({lon} {lat})"
-                else:
-                    wkt = None
-            else:
-                wkt = None
+        if (
+            isinstance(location_data, dict)
+            and "coordinates" in location_data
+            and len(location_data["coordinates"]) == 2
+        ):
+            lon = safe_float(location_data["coordinates"][0])
+            lat = safe_float(location_data["coordinates"][1])
         else:
-            wkt = None
+            lon = None
+            lat = None
+
+        # Build the dynamic part for store_location:
+        # If we have valid coordinates, store as point(lon, lat).
+        # Otherwise, store NULL.
+        if lon is not None and lat is not None:
+            location_expr = "point(%s, %s)"
+            location_params = (lon, lat)
+        else:
+            location_expr = "NULL"
+            location_params = ()
+
 
         # Build SQL for insertion using ST_GeomFromText to convert WKT to a POINT
-        sql = """
+        sql = f"""
             INSERT INTO LiquorSales (
                 invoice_line_no, date, store, name, address, city, zipcode,
                 store_location, county_number, county, category, category_name,
@@ -101,21 +108,25 @@ while check:
             )
             VALUES (
                 %s, %s, %s, %s, %s, %s, %s,
-                ST_GeomFromText(%s),
+                {location_expr},
                 %s, %s, %s, %s,
                 %s, %s, %s, %s, %s, %s,
                 %s, %s, %s, %s,
                 %s, %s
             )
         """
-        cursor.execute(sql, (
+
+        other_columns = (
             invoice_line_no, date_str, store, name, address, city, zipcode,
-            wkt,
             county_number, county, category, category_name,
             vendor_no, vendor_name, itemno, im_desc,
             pack_, bottle_volume_ml, state_bottle_cost, state_bottle_retail,
             sale_bottles, sale_dollars, sale_liters, sale_gallons
-        ))
+        )
+
+        # Combine location_params (could be () or (lon, lat)) with the other columns
+        params = other_columns[:7] + location_params + other_columns[7:]
+        cursor.execute(sql, params)
 
     db_conn.commit()
 
