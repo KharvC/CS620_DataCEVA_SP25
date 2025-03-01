@@ -2,17 +2,17 @@ version: '3.8'
 
 services:
   db:
-    image: mysql/mysql-server:latest
+    image: postgres:latest
     container_name: liquor_sales_IA_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: cs620ibdc1234
-      MYSQL_DATABASE: IowaLiquorSales
-      MYSQL_ROOT_HOST: '%'
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: cs620ibdc1234
+      POSTGRES_DB: IowaLiquorSales
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/postgresql/data 
       - ./create.sql:/docker-entrypoint-initdb.d/create.sql:ro
 
   dataloader:
