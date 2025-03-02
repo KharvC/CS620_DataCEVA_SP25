@@ -24,7 +24,7 @@ const JustAskAI = () => {
       <div style={{ 
         width: '50%', 
         maxWidth: '600px', 
-        padding: '500px', 
+        padding: '800px', 
         backgroundColor: 'white', 
         boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', 
         borderRadius: '8px', 
