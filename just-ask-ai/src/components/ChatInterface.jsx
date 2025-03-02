@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./ChatInterface.css"; // Import the CSS file
 
 const ChatInterface = () => {
   const [query, setQuery] = useState("");
@@ -10,25 +11,22 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 px-150">
-      <h1 className="text-2xl font-bold mb-4 whitespace-nowrap">Just Ask AI</h1>
-      <div className="w-full max-w-2xl bg-white shadow-md p-6 rounded-lg">
-        <form onSubmit={handleSubmit} className="flex flex-col">
+    <div className="chat-container">
+      <div className="chat-box">
+        <h1 className="chat-title">Just Ask AI</h1>
+        <form onSubmit={handleSubmit} className="chat-form">
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Ask a question..."
-            className="p-2 border rounded-md mb-2"
+            className="chat-input"
           />
-          <button
-            type="submit"
-            className="bg-blue-600 text-black p-2 rounded-md hover:bg-blue-700"
-          >
+          <button type="submit" className="chat-button">
             Ask
           </button>
         </form>
-        {response && <p className="mt-4 text-gray-700">{response}</p>}
+        {response && <p className="chat-response">{response}</p>}
       </div>
     </div>
   );
