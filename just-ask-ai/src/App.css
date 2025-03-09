@@ -17,7 +17,7 @@
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
-  background-color: #497E9D;
+  background-color: #034967;
 }
 
 /* Center the content properly */
@@ -25,7 +25,7 @@
   width: 90%;
   max-width: 800px; /* Adjust as needed */
   padding: 2rem;
-  background-color: #F8F8F8;
+  background-color: #F15E3F;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   text-align: center;
@@ -34,10 +34,16 @@
 .input-field {
   width: 80%;
   padding: 10px;
-  border: 2px solid #034967;
+  border: 2px solid #497E9D;
+  background-color: #497E9D;
   border-radius: 5px;
   font-size: 1em;
-  color: #034967;
+  color: #F8F8F8;
+}
+
+.input-field::placeholder{
+  color: #F8F8F8;
+  opacity: 1;
 }
 
 .submit-button {
@@ -46,7 +52,7 @@
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #F15E3F;
+  background-color: #034967;
   color: white;
   border: none;
   border-radius: 8px;
@@ -57,11 +63,16 @@
 .response-box {
   margin-top: 20px;
   padding: 1rem;
-  background-color: #D9D9D9;
+  background-color: #497E9D;
   border-radius: 8px;
-  color: #034967;
+  color: #F8F8F8;
+}
+
+.response-box::placeholder{
+  color: #F8F8F8;
+  opacity: 1;
 }
 
 .submit-button:hover {
-  background-color: #F4917A;
+  background-color: #497E9D;
 }
