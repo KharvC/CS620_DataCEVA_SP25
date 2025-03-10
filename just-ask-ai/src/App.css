@@ -10,6 +10,13 @@
   background-color: #034967;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Ensures input and button are centered */
+  gap: 10px; /* Adds spacing between input and button */
+}
+
 /* Fullscreen container (ensures centering) */
 .fullscreen-container {
   width: 100vw;
@@ -58,14 +65,22 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 40px;
+  position: relative;
+  overflow: hidden;
 }
 
-.response-box {
-  margin-top: 20px;
-  padding: 1rem;
-  background-color: #497E9D;
-  border-radius: 8px;
-  color: #F8F8F8;
+.pacman-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Ensures Pacman starts from the left */
+  width: 100%;
+  height: 100%;
+  padding-left: 10px; /* Adds space so dots appear after Pacman */
 }
 
 .response-box::placeholder{
