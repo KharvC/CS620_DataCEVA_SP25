@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: chat_logs_db
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5433:5432" #Different from default port (5432:5432) to avoid conflicts with the sales data container
+    volumes:
+      - chats_db_data:/var/lib/postgresql/data 
+      - ./create_be.sql:/docker-entrypoint-initdb.d/create_be.sql:ro
+      
+volumes:
+  chats_db_data:
