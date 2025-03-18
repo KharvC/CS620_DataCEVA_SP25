@@ -3,10 +3,9 @@ import Sidebar from "./components/sidebar";
 import ChatWindow from "./components/chatwindow";
 import "./App.css";
 
-const JustAskAI = () => {
-  let [loading, setLoading] = useState(false);
-  const [query, setQuery] = useState('');
-  const [response, setResponse] = useState(null);
+const App = () => {
+  const [chats, setChats] = useState([]); // List of chat threads
+  const [currentChatIndex, setCurrentChatIndex] = useState(null); // Active chat
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,9 +24,6 @@ const JustAskAI = () => {
 
     setLoading(false);
   };
-const App = () => {
-  const [chats, setChats] = useState([]); // List of chat threads
-  const [currentChatIndex, setCurrentChatIndex] = useState(null); // Active chat
 
   // Start a new chat session
   const handleNewChat = () => {
