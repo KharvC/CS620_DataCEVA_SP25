@@ -33,6 +33,16 @@ Question: {question}
 Respond with only the SQL query and nothing else."""
 db_prompt = ChatPromptTemplate.from_template(db_template)
 
+# Define final processing prompt
+final_response_template = """Given the following query results:
+{results}
+
+Answer the user's question:
+Question: {question}
+
+Response:"""
+final_response_prompt = ChatPromptTemplate.from_template(final_response_template)
+
 # Define general query prompt
 general_template = """Answer the following question concisely and accurately:
 
@@ -74,9 +84,22 @@ def process_query(query: Query):
         # Execute SQL query
         try:
             result = db.run(sql_query)
+            print(result)
+            # Provide context to DeepSeek to ensure a meaningful response
+            formatted_result = f"The database query returned the following data: {result}. This result represents the answer to the question: {query.question}. Please summarize it clearly."
+
+            final_response = llm.invoke(
+                final_response_prompt.format(results=formatted_result, question=query.question)
+            )
+
+            # Clean up the response (if needed)
+            cleaned_response = re.sub(r"<think>.*?</think>", "", final_response, flags=re.DOTALL).strip()
+
+            # Store for reference
             memory_db["last_query"] = sql_query
-            memory_db["last_response"] = result
-            return {"query": sql_query, "result": result}
+            memory_db["last_response"] = cleaned_response
+            
+            return {"query": sql_query, "response": cleaned_response}
         except Exception as e:
             memory_db["last_response"] = str(e)
             return {"error": str(e)}

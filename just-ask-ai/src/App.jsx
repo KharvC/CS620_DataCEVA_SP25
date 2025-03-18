@@ -14,12 +14,9 @@ const JustAskAI = () => {
     setLoading(true);
 
     const result = await sendUserQuery(query);
-    console.log("Frontend received:", result); // Debugging
 
     if (result.error) {
       setResponse("Error storing query. Check console for details.");
-    } else if (result.result) {
-      setResponse(`SQL Query Result: ${JSON.stringify(result.result, null, 2)}`);
     } else if (result.response) {
       setResponse(result.response); // General AI response
     } else {
