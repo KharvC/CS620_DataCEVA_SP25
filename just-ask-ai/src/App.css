@@ -1,46 +1,114 @@
-/* Ensure the entire app takes up the full screen and centers content */
-#root {
+/* Ensure the app takes up the full screen */
+#root, body, html {
   width: 100vw;
   height: 100vh;
   margin: 0;
   padding: 0;
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center;
+  align-items: center;
   background-color: #034967;
+  overflow: hidden; /* Prevents unwanted scrolling */
 }
 
-form {
+/* App container - fills the full screen */
+.app-container {
   display: flex;
-  flex-direction: column;
-  align-items: center; /* Ensures input and button are centered */
-  gap: 10px; /* Adds spacing between input and button */
-}
-
-/* Fullscreen container (ensures centering) */
-.fullscreen-container {
   width: 100vw;
   height: 100vh;
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  background-color: #034967;
+  background: #F15E3F;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+  border: 3px solid #034967;
 }
 
-/* Center the content properly */
-.content-box {
-  width: 90%;
-  max-width: 800px; /* Adjust as needed */
-  padding: 2rem;
-  background-color: #F15E3F;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+/* Sidebar - fixed width */
+.sidebar {
+  width: 280px;
+  background: #1e1e1e;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  border-right: 3px solid #034967;
+}
+
+/* Sidebar title */
+.sidebar h2 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
   text-align: center;
 }
 
-.input-field {
-  width: 80%;
+/* Sidebar chat history */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* Sidebar chat items */
+.sidebar li {
+  padding: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid gray;
+  transition: background 0.3s;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.sidebar li:hover {
+  background: #333;
+}
+
+/* Chat window - takes remaining space */
+.chat-window {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #2b2b2b;
+  color: white;
+  padding: 20px;
+  border-left: 3px solid #034967;
+  overflow: hidden;
+}
+
+/* Messages container - scrollable */
+.messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-bottom: 10px;
+  border: 2px solid #497E9D;
+  border-radius: 10px;
+  padding: 15px;
+  background: #1e1e1e;
+  max-height: calc(100vh - 150px); /* Keeps input visible */
+}
+
+/* Single chat message */
+.chat-message {
+  background: #444;
   padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  border: 1px solid #497E9D;
+}
+
+/* Input & form */
+.input-area {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Input field */
+.input-field {
+  flex: 1;
+  padding: 12px;
   border: 2px solid #497E9D;
   background-color: #497E9D;
   border-radius: 5px;
@@ -48,13 +116,14 @@ form {
   color: #F8F8F8;
 }
 
-.input-field::placeholder{
+/* Placeholder text */
+.input-field::placeholder {
   color: #F8F8F8;
   opacity: 1;
 }
 
+/* Submit button */
 .submit-button {
-  margin-top: 10px;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
@@ -72,22 +141,16 @@ form {
   height: 40px;
   position: relative;
   overflow: hidden;
-}
-
-.pacman-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; /* Ensures Pacman starts from the left */
-  width: 100%;
-  height: 100%;
-  padding-left: 10px; /* Adds space so dots appear after Pacman */
-}
-
-.response-box::placeholder{
-  color: #F8F8F8;
-  opacity: 1;
+  border: 2px solid white;
 }
 
 .submit-button:hover {
   background-color: #497E9D;
+}
+
+/* Loading spinner */
+.loading {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }

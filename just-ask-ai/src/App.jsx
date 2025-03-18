@@ -1,67 +1,49 @@
-import React, { useState } from 'react';
-import PacmanLoader from 'react-spinners/PacmanLoader';
-import './App.css';
-import { sendUserQuery } from './api';
+import React, { useState, useEffect } from "react";
+import Sidebar from "./components/sidebar";
+import ChatWindow from "./components/chatwindow";
+import "./App.css";
 
-const JustAskAI = () => {
-  let [loading, setLoading] = useState(false);
-  const [query, setQuery] = useState('');
-  const [response, setResponse] = useState(null);
+const App = () => {
+  const [chats, setChats] = useState([]); // List of chat threads
+  const [currentChatIndex, setCurrentChatIndex] = useState(null); // Active chat
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setResponse(null);
-    setLoading(true);
-
-    const result = await sendUserQuery(query);
-    console.log("Frontend received:", result); // Debugging
-
-    if (result.error) {
-      setResponse("Error storing query. Check console for details.");
-    } else if (result.result) {
-      setResponse(`SQL Query Result: ${JSON.stringify(result.result, null, 2)}`);
-    } else if (result.response) {
-      setResponse(result.response); // General AI response
-    } else {
-      setResponse("Unexpected response format.");
-    }
-
-    setLoading(false);
+  // Start a new chat session
+  const handleNewChat = () => {
+    const newChat = { title: `Chat ${chats.length + 1}`, messages: [] };
+    setChats([...chats, newChat]);
+    setCurrentChatIndex(chats.length); // Select new chat
   };
 
+  // Select an existing chat from history
+  const handleSelectChat = (index) => {
+    setCurrentChatIndex(index);
+  };
+
+  // Append new message to the current chat
+  const handleSendMessage = (newMessage) => {
+    if (currentChatIndex === null) {
+      handleNewChat(); // Ensure there’s an active chat
+    }
+    const updatedChats = [...chats];
+    updatedChats[currentChatIndex].messages.push(newMessage);
+    setChats(updatedChats);
+  };
+
+  // Automatically start a new chat on initial load
+  useEffect(() => {
+    if (chats.length === 0) {
+      handleNewChat();
+    }
+  }, []);
+
   return (
-    <div className="fullscreen-container">
-      <div className="content-box">
-        <h1>Just Ask AI</h1>
-        <p>Interact with AI to get real-time insights from your business data.</p>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Ask a question..."
-            className="input-field"
-          />
-          <br />
-          <button type="submit" className="submit-button" disabled={loading}>
-            {loading ? (
-              <div className="pacman-container">
-                <PacmanLoader color="#fff" size={12} />
-              </div>
-            ) : (
-              "Ask"
-            )}
-          </button>
-        </form>
-        {response && (
-          <div className="response-box">
-            <strong>Response:</strong>
-            <p>{response}</p>
-          </div>
-        )}
-      </div>
+    <div className="app-container">
+      <Sidebar chats={chats} onNewChat={handleNewChat} onSelectChat={handleSelectChat} />
+      {currentChatIndex !== null ? (
+        <ChatWindow messages={chats[currentChatIndex].messages} onSendMessage={handleSendMessage} />
+      ) : null}
     </div>
   );
 };
 
-export default JustAskAI;
+export default App;
