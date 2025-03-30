@@ -29,6 +29,7 @@ app.add_middleware(
 load_dotenv(dotenv_path="../.env")
 
 api_key = os.getenv("OPENAI_API_KEY")
+os.environ["OPENAI_API_KEY"] = api_key
 llm = ChatOpenAI(model_name="gpt-4", openai_api_key= api_key, temperature=0)
 
 
@@ -87,7 +88,7 @@ def process_query(query: Query):
         
         # Generate SQL query using DeepSeek
         response = llm.invoke(db_prompt.format(schema=schema, question=query.question))
-        sql_query = response.split("\n")[-1].strip()
+        sql_query = response.content.split("\n")[-1].strip()
         
         # Execute SQL query
         try:
@@ -101,7 +102,7 @@ def process_query(query: Query):
             )
 
             # Clean up the response (if needed)
-            cleaned_response = re.sub(r"<think>.*?</think>", "", final_response, flags=re.DOTALL).strip()
+            cleaned_response = re.sub(r"<think>.*?</think>", "", final_response.content, flags=re.DOTALL).strip()
 
             # Store for reference
             memory_db["last_query"] = sql_query
@@ -115,7 +116,7 @@ def process_query(query: Query):
         # Generate a general response using DeepSeek
         response = llm.invoke(general_prompt.format(question=query.question))
         # Remove '<think>' sections
-        cleaned_response = re.sub(r"<think>.*?</think>", "", response, flags=re.DOTALL).strip()
+        cleaned_response = re.sub(r"<think>.*?</think>", "", response.content, flags=re.DOTALL).strip()
         
         memory_db["last_query"] = query.question
         memory_db["last_response"] = cleaned_response
