@@ -2,10 +2,13 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from langchain_ollama.llms import OllamaLLM
+#from langchain_ollama.llms import OllamaLLM
+from langchain.chat_models import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.utilities import SQLDatabase
 import re
+from dotenv import load_dotenv
+import os
 
 app = FastAPI()
 
@@ -22,7 +25,12 @@ app.add_middleware(
 )
 
 # Initialize DeepSeek LLM via Ollama
-llm = OllamaLLM(model="deepseek-r1:1.5b")
+#llm = OllamaLLM(model="deepseek-r1:1.5b")
+load_dotenv(dotenv_path="../.env")
+
+api_key = os.getenv("OPENAI_API_KEY")
+llm = ChatOpenAI(model_name="gpt-4", openai_api_key= api_key, temperature=0)
+
 
 # Define SQL query generation prompt
 db_template = """Based on the table schema below, write a SQL query that would answer the user's question:
