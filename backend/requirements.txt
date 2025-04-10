@@ -6,3 +6,4 @@ langchain-community
 langchain-ollama
 ipykernel
 psycopg2-binary
+faiss-cpu
