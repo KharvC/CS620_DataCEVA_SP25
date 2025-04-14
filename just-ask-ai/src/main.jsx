@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route} from 'react-router-dom';
-import JustAskAI from './App.jsx';
+import App from './App.jsx';
 import Login from './Login.jsx';
 import Register from './Register.jsx';
 import './index.css';
@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/chat" element={<JustAskAI />} />
+        <Route path="/chat" element={<App />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

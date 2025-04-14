@@ -53,7 +53,7 @@ const App = () => {
   useEffect(() => {
     const verifyToken = async () => {
       const token = localStorage.getItem('token');
-      console.log(token);
+      if (!token) navigate("/login");
       try {
         const response = await fetch("http://localhost:8000/auth/verify-token",{
           headers: {
