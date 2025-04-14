@@ -12,6 +12,12 @@ const Sidebar = ({ chats, onNewChat, onSelectChat }) => {
           </li>
         ))}
       </ul>
+      <button className="sign-out-button" onClick={() => {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      }}>
+        Sign Out
+      </button>
     </div>
   );
 };

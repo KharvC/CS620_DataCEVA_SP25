@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./components/sidebar";
 import ChatWindow from "./components/chatwindow";
+import { useNavigate } from "react-router-dom";
 import "./App.css";
 
 const App = () => {
   const [chats, setChats] = useState([]); // List of chat threads
   const [currentChatIndex, setCurrentChatIndex] = useState(null); // Active chat
-
+  const navigate = useNavigate();
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setResponse(null);
@@ -49,9 +51,27 @@ const App = () => {
 
   // Automatically start a new chat on initial load
   useEffect(() => {
-    if (chats.length === 0) {
-      handleNewChat();
-    }
+    const verifyToken = async () => {
+      const token = localStorage.getItem('token');
+      console.log(token);
+      try {
+        const response = await fetch("http://localhost:8000/auth/verify-token",{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Token verification failed');
+        }
+        if (chats.length === 0) {
+          handleNewChat();
+        }
+      } catch (error) {
+        localStorage.removeItem('token'); // Remove invalid token
+        navigate('/login');
+      }
+    };
+    verifyToken();
   }, []);
 
   return (
