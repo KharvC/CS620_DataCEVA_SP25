@@ -9,13 +9,17 @@ from models import User
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 router = APIRouter(
     prefix="/auth",
     tags=["auth"],
 )
 
-SECRET_KEY = "your_secret_key"  # Replace with your secret key
+SECRET_KEY = os.getenv("SECRET_KEY")  # Replace with your secret key
+REFRESH_SECRET_KEY=os.getenv("REFRESH_SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 15
 

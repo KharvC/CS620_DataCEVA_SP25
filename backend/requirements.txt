@@ -7,6 +7,7 @@ SQLAlchemy
 uvicorn
 passlib
 pydantic
+python-dotenv
 
 langchain
 langchain-community
@@ -15,4 +16,3 @@ ipykernel
 psycopg2-binary
 faiss-cpu
 
-python-dotenv
