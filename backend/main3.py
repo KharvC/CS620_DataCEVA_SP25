@@ -3,6 +3,7 @@ import uvicorn
 from typing import Optional
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 from langchain.embeddings import OpenAIEmbeddings
@@ -18,8 +19,19 @@ load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 db_connection_string = os.getenv("POSTGRESQL_URI")
 
-#FastAPI setup
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 #Pydantic Model for Query
 class Query(BaseModel):
@@ -50,7 +62,6 @@ def build_pgvector_store(
         connection_string=connection_string,
         collection_name=collection_name,        
         embedding_function=embeddings,
-        create_table_if_not_exists=True      
     )
 
     existing_ids = set()
