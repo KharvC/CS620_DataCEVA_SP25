@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 import auth
 from fastapi.middleware.cors import CORSMiddleware
+from models import Base
+from database import engine
 
 # from pydantic import BaseModel
 #from langchain_ollama.llms import OllamaLLM
@@ -15,7 +17,6 @@ from fastapi.middleware.cors import CORSMiddleware
 # import os
 
 app = FastAPI()
-app.include_router(auth.router)
 
 origins = [
     "http://localhost:5173"
@@ -29,6 +30,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router)
+
+Base.metadata.create_all(bind=engine)
 
 # # Load environment variables and set API key
 # load_dotenv(dotenv_path="../.env")

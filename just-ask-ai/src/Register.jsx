@@ -39,7 +39,6 @@ function Register() {
             if (response.ok) {
                 setError(null);
                 alert("Registration successful! Please log in.");
-                navigate('/login');
             } else {
                 const errorData = await response.json();
                 setError(errorData.detail || 'Registration failed');

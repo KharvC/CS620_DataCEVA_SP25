@@ -15,3 +15,4 @@ class RefreshToken(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     token = Column(String, unique=True, index=True)
     expires_at = Column(Integer, index=True)
+    revoked = Column(Boolean, default=False)

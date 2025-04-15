@@ -56,7 +56,7 @@ async def create_user(db: db_dependency,
     )
     db.add(create_user_model)
     db.commit()
-    
+
 def authenticate_user(username: str, password: str, db):
     user = db.query(User).filter(User.username == username).first()
     if not user or not pwd_context.verify(password, user.hashed_password):
@@ -97,7 +97,9 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
     db.add(RefreshToken(
         user_id=user.id, 
         token=refresh_token, 
-        expires_at=refresh_exp))
+        expires_at=refresh_exp,
+        revoked=False))
+    db.commit()
     return {"access_token": token, "refresh_token" : refresh_token, "token_type": "bearer"}
 
 @router.get("/verify-token")
@@ -131,7 +133,7 @@ async def get_current_user_refresh(request: Request, db: db_dependency) -> dict:
         RefreshToken.revoked == False,
         RefreshToken.expires_at > datetime.now(timezone.utc).timestamp()
         ).first()
-    
+
     if not refresh_entry:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session expired or invalid")
 
