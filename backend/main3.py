@@ -22,7 +22,8 @@ db_connection_string = os.getenv("POSTGRESQL_URI")
 app = FastAPI()
 
 origins = [
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
 ]
 
 app.add_middleware(
@@ -178,9 +179,9 @@ def process_query(query: Query):
         return {"error": "RAG chain not initialized."}
 
     # Run the question through the chain
-    answer = rag_chain.run(user_question)
+    response = rag_chain.run(user_question)
 
-    return {"question": user_question, "answer": answer}
+    return {"question": user_question, "response": response}
 
 
 #endpoint to verify the service's working
