@@ -122,7 +122,7 @@ def create_rag_chain(
     vectorstore: PGVector,
     model_name: str = "gpt-4",
     temperature: float = 0.0,
-    k_retrieval: int = 3
+    k_retrieval: int = 50
 ) -> RetrievalQA:
     
     llm = ChatOpenAI(
@@ -163,7 +163,7 @@ def startup_event():
         vectorstore=vectorstore,
         model_name="gpt-4",
         temperature=0.0,
-        k_retrieval=3
+        k_retrieval=50
     )
     print("RAG chain created.")
 
