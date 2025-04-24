@@ -49,81 +49,14 @@ def get_db_connection():
     return engine.raw_connection()
 
 
-def build_pgvector_store(
-    connection_string: str,
-    collection_name: str = "vector_embeds",
-    table_name: str = "liquorsales",
-    embeddings_batch_size: int = 1000,
-    max_rows: int = 10000
-):
-    
-    # Creating embeddings instance and PGVector store object
-    embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
-    vectorstore = PGVector(
-        connection_string=connection_string,
-        collection_name=collection_name,        
-        embedding_function=embeddings,
-    )
 
-    existing_ids = set()
-    with psycopg2.connect(connection_string) as pgconn:
-        with pgconn.cursor() as cur:
-            metadata_query = f"SELECT metadata->>'record_id' FROM {collection_name};"
-            cur.execute(metadata_query)
-            rows = cur.fetchall()
-            existing_ids = {r[0] for r in rows if r[0] is not None}
-
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    offset = 0
-    total_processed = 0
-
-    while total_processed < max_rows:
-        query_batch = f"SELECT * FROM {table_name} LIMIT {embeddings_batch_size} OFFSET {offset};"
-        cursor.execute(query_batch)
-        batch_results = cursor.fetchall()
-
-        if not batch_results:
-            break
-
-        documents = []
-        for row in batch_results:
-            record_id = str(row[0])
-
-            if record_id in existing_ids:
-                continue
-
-            page_content = " ".join([str(col) for col in row])
-
-            doc = Document(
-                page_content=page_content,
-                metadata={"record_id": record_id}
-            )
-            documents.append(doc)
-
-        if documents:
-            vectorstore.add_documents(documents)
-            for doc in documents:
-                existing_ids.add(doc.metadata["record_id"])
-
-        offset += embeddings_batch_size
-        batch_size_retrieved = len(batch_results)
-        total_processed += batch_size_retrieved
-        print(f"Processed {batch_size_retrieved} new rows; total so far = {total_processed}")
-
-    cursor.close()
-    conn.close()
-
-    return vectorstore
 
 
 def create_rag_chain(
     vectorstore: PGVector,
     model_name: str = "gpt-4",
     temperature: float = 0.0,
-    k_retrieval: int = 50
+    k_retrieval: int = 10
 ) -> RetrievalQA:
     
     llm = ChatOpenAI(
@@ -148,23 +81,20 @@ def startup_event():
    
     global rag_chain
 
-    # Build the vector store from your table
-    print("Building/Updating vector store from DB ...")
-    vectorstore = build_pgvector_store(
+    embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
+
+    vectorstore = PGVector(
         connection_string=db_connection_string,
-        collection_name="vector_embeds",  
-        table_name="liquorsales",         
-        embeddings_batch_size=1000,
-        max_rows=10000
+        collection_name="vector_embeds",
+        embedding_function=embeddings,
     )
-    print("Vector store ready.")
 
     # Create the chain
     rag_chain = create_rag_chain(
         vectorstore=vectorstore,
         model_name="gpt-4",
         temperature=0.0,
-        k_retrieval=50
+        k_retrieval=10
     )
     print("RAG chain created.")
 
