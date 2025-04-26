@@ -1,6 +1,7 @@
 import os
 import uvicorn
 from typing import Optional, Dict, Any
+import numbers
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -93,6 +94,12 @@ def startup_event():
     )
     print("RAG chain created.")
 
+def format_value(v: Any) -> str:
+    """Comma-format numbers, leave everything else as str."""
+    if isinstance(v, numbers.Number):
+        return f"{v:,}"
+    return str(v)
+
 
 @app.post("/query")
 def process_query(query: Query):
@@ -102,7 +109,7 @@ def process_query(query: Query):
     if not rag_chain:
         return {"error": "RAG chain not initialized."}
 
-    # 1. Use LLM to decide if SQL is better than RAG
+    # 1. SQL
     prompt = f"""
     You are working with a PostgreSQL database. The table is called 'liquorsales' and contains fields like:
     - date (DATE): the date of the sale
@@ -123,7 +130,7 @@ def process_query(query: Query):
     sql_candidate = llm.predict(prompt).strip()
 
     if sql_candidate.lower().startswith("select"):
-        # Optional safeguard to correct hallucinated table names
+        #safeguard to correct hallucinated table names
         if "from sales" in sql_candidate.lower():
             sql_candidate = sql_candidate.replace("FROM sales", "FROM liquorsales")
 
@@ -134,11 +141,28 @@ def process_query(query: Query):
                 rows = result.fetchall()
                 keys = result.keys()
                 data = [dict(zip(keys, row)) for row in rows]
-                return {"question": user_question, "response": data, "sql_used": sql_candidate}
-        except Exception as e:
-            return {"question": user_question, "response": f"SQL execution failed: {str(e)}", "sql_attempted": sql_candidate}
+                
+            if len(data) == 1:
+                row = data[0]
+                if len(row) == 1:
+                    val = next(iter(row.values()))
+                    answer = f"{user_question} → {format_value(val)}"
+                else:
+                    parts = [f"{k}: {format_value(v)}" for k, v in row.items()]
+                    answer = f"{user_question} → " + "; ".join(parts)
+            else:
+                lines = []
+                for r in data:
+                    parts = [f"{k}: {format_value(v)}" for k, v in r.items()]
+                    lines.append(", ".join(parts))
+                answer = f"{user_question} →\n" + "\n".join(lines)
 
-    # 2. Fall back to RAG
+            return {"response": answer}
+
+        except Exception as e:
+            return {"error": f"SQL execution failed: {e}"}                
+
+    # 2.RAG
     retriever = rag_chain.retriever.vectorstore.as_retriever(
         search_kwargs={"k": 50000, "filter": query.filters} if query.filters else {"k": 50000}
     )
