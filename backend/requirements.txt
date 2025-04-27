@@ -16,3 +16,6 @@ ipykernel
 psycopg2-binary
 faiss-cpu
 
+sqlalchemy
+tiktoken
+pgvector
