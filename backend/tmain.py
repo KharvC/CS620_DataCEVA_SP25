@@ -17,6 +17,10 @@ import sqlalchemy
 from sqlalchemy import text
 import psycopg2
 
+import auth
+from models import Base
+from database import engine
+
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 db_connection_string = os.getenv("POSTGRESQL_URI")
@@ -35,6 +39,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth.router)
+
+Base.metadata.create_all(bind=engine)
 
 # Pydantic Model for Query
 class Query(BaseModel):
