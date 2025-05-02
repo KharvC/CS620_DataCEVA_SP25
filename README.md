@@ -72,7 +72,9 @@ Once in the chatbox, ask question related to your data (for example, how many sa
 -**SQL + RAG**: `main.py`, `main_rag.py`
 
 #### Frontend
-
+-**Logic**: `App.jsx`
+-**Styling**: `App.css`, `index.css`
+-**dependencies**: `package.json`
 
 
 ## What Works and What Doesn't Work
