@@ -16,11 +16,9 @@ Step 1: setup .env files
     - you will need two .env files (one in the `backend` directory and one in the `CS620_DataCEVA_SP25` directory)
     - Example of .env file in `backend` directory:
 
-    
     ```
     SECRET_KEY= //your secret key
     REFRESH_SECRET_KEY= //your refresh secret key
     OPENAI_API_KEY= //your openai key
     POSTGRESQL_URI= //your postgresql connection link
-
     ```
