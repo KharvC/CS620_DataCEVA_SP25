@@ -1,4 +1,4 @@
-# Link to Repo
+## Link to Repo
  
 [DataCEVA Git Repository](https://github.com/KharvC/CS620_DataCEVA_SP25)
 
@@ -12,7 +12,7 @@ The target users for this project include business analysts, sales managers, and
 
 ## Setup Steps
 
-Step 1: Setup .env files
+**Step 1**: Setup .env files
 
 - You will need two .env files (one in the `backend` directory and one in the `CS620_DataCEVA_SP25` directory)
 - Example of .env file in `backend` directory:
@@ -31,7 +31,7 @@ OPENAI_API_KEY= //your openai key
 POSTGRESQL_URI= //your postgresql connection link
 ```
 
-Step 2: Run pip install for requirements.txt
+**Step 2**: Run pip install for requirements.txt
 
 - Run this code block (make sure to be in the `backend` directory when running this line):
 
@@ -39,7 +39,7 @@ Step 2: Run pip install for requirements.txt
 pip install requirements.txt
 ```
 
-Step 3: Running code to setup backend
+**Step 3**: Running code to setup backend
 
 - Run this code block (make sure to be in the `backend` directory when running this line):
 
@@ -47,7 +47,7 @@ Step 3: Running code to setup backend
 uvicorn main:app
 ```
 
-Step 4: Running code to startup application
+**Step 4**: Running code to startup application
 
 - Run this code block (make sure to be in the `just-ask-ai` directory when running this line):
 
@@ -56,4 +56,29 @@ npm install
 npm run dev
 ```
 
-**Note**
+*Note*: make sure you have nodejs, npm, and pip installed to successfully run the code blocks for setup
+
+## Overview of Code
+
+Once the application is running, you will need to register a username and password if you do not have one already. Otherwise, login using your username and password.
+
+Once in the chatbox
+
+
+## What Works and What Doesn't Work
+
+As of now, our application is running on SQL queries since using RAG takes a long time to generate an answer. Our application is fully functional
+and we are able to get accurate answers based on the given database.
+
+As mentioned before, RAG is taking a lot of time to generate an answer, but we do have the vector embeddings to continue with trying to implement
+RAG in a way where the time it takes to generate an answer is significanlty reduced.
+
+## What We Would Work On Next
+
+We would implement an indexing strategy (ANN indexing) in order to reduce the time it takes for the application to reduce the time it takes to search through the vector embeddings to find relevant data to answer the user's inquiry.
+
+Although we have vector embeddings with dimensions, we would also look into creating vector embeddings with smaller dimensions.
+
+Another thing we would like to implement is chat retention so users can access previous chat logs.
+
+The last thing we would like to work on is potentially improving the look of the UI, making it more aesthetically pleasing.
