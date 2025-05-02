@@ -1,4 +1,4 @@
-## Link to Repo
+# Link to Repo
  
 [DataCEVA Git Repository](https://github.com/KharvC/CS620_DataCEVA_SP25)
 
