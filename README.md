@@ -67,14 +67,14 @@ Once in the chatbox, ask question related to your data (for example, how many sa
 ### In-Depth Overview
 
 #### Backend
--**login**: `auth.py`, `database.py`, `models.py`
--**vector embeddings creation**: `embed.py`
--**SQL + RAG**: `main.py`, `main_rag.py`
+- **login**: `auth.py`, `database.py`, `models.py`
+- **vector embeddings creation**: `embed.py`
+- **SQL + RAG**: `main.py`, `main_rag.py`
 
 #### Frontend
--**Logic**: `App.jsx`
--**Styling**: `App.css`, `index.css`
--**dependencies**: `package.json`
+- **Logic**: `App.jsx`
+- **Styling**: `App.css`, `index.css`
+- **dependencies**: `package.json`
 
 
 ## What Works and What Doesn't Work
