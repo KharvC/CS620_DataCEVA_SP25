@@ -62,7 +62,15 @@ npm run dev
 
 Once the application is running, you will need to register a username and password if you do not have one already. Otherwise, login using your username and password.
 
-Once in the chatbox
+Once in the chatbox, ask question related to your data (for example, how many sales have I had in the first quarter?). The LLM will then generate a quick answer by retrieving data from your database in order to give an accurate response to your question.
+
+### In-Depth Overview
+
+In the backend, you should run `embed.py` **only once** in order to generate the vector embeddings. The vector embeddings are generated using `text-embedding-ada-002` which uses the default dimensions of 1,536.
+
+*Note*: These vector embeddings would be used for the RAG implementation, specifically when we implement the ANN indexing (IVFFlat) strategy.
+
+
 
 
 ## What Works and What Doesn't Work
@@ -75,7 +83,7 @@ RAG in a way where the time it takes to generate an answer is significanlty redu
 
 ## What We Would Work On Next
 
-We would implement an indexing strategy (ANN indexing) in order to reduce the time it takes for the application to reduce the time it takes to search through the vector embeddings to find relevant data to answer the user's inquiry.
+We would implement an indexing strategy (ANN indexing, specifically IVFFlat) in order to reduce the time it takes for the application to reduce the time it takes to search through the vector embeddings to find relevant data to answer the user's inquiry.
 
 Although we have vector embeddings with dimensions, we would also look into creating vector embeddings with smaller dimensions.
 
