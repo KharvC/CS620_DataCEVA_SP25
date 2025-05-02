@@ -66,10 +66,12 @@ Once in the chatbox, ask question related to your data (for example, how many sa
 
 ### In-Depth Overview
 
-In the backend, you should run `embed.py` **only once** in order to generate the vector embeddings. The vector embeddings are generated using `text-embedding-ada-002` which uses the default dimensions of 1,536.
+#### Backend
+-**login**: `auth.py`, `database.py`, `models.py`
+-**vector embeddings creation**: `embed.py`
+-**SQL + RAG**: `main.py`, `main_rag.py`
 
-*Note*: These vector embeddings would be used for the RAG implementation, specifically when we implement the ANN indexing (IVFFlat) strategy.
-
+#### Frontend
 
 
 
