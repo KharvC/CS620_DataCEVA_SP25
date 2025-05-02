@@ -44,7 +44,7 @@ app.include_router(auth.router)
 
 Base.metadata.create_all(bind=engine)
 
-# Pydantic Model for Query
+# pydantic model for query
 class Query(BaseModel):
     question: str
     filters: Optional[Dict[str, Any]] = None
@@ -117,7 +117,7 @@ def process_query(query: Query):
     if not rag_chain:
         return {"error": "RAG chain not initialized."}
 
-    # 1. SQL
+    # SQL implementation
     prompt = f"""
     You are working with a PostgreSQL database. The table is called 'liquorsales' and contains fields like:
     - date (DATE): the date of the sale
@@ -138,7 +138,7 @@ def process_query(query: Query):
     sql_candidate = llm.predict(prompt).strip()
 
     if sql_candidate.lower().startswith("select"):
-        #safeguard to correct hallucinated table names
+        # safeguard to correct hallucinated table names
         if "from sales" in sql_candidate.lower():
             sql_candidate = sql_candidate.replace("FROM sales", "FROM liquorsales")
 
@@ -170,7 +170,7 @@ def process_query(query: Query):
         except Exception as e:
             return {"error": f"SQL execution failed: {e}"}                
 
-    # 2.RAG
+    # RAG implementation
     retriever = rag_chain.retriever.vectorstore.as_retriever(
         search_kwargs={"k": 50000, "filter": query.filters} if query.filters else {"k": 50000}
     )

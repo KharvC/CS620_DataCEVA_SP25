@@ -34,7 +34,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#Pydantic Model for Query
+# pydantic model for query
 class Query(BaseModel):
     question: str
 
@@ -43,7 +43,7 @@ rag_chain: Optional[RetrievalQA] = None
 
 def get_db_connection():
     
-    #Returns a psycopg2 connection
+    # returns a psycopg2 connection
     
     engine = sqlalchemy.create_engine(db_connection_string)
     return engine.raw_connection()
@@ -89,7 +89,7 @@ def startup_event():
         embedding_function=embeddings,
     )
 
-    # Create the chain
+    # creating chain
     rag_chain = create_rag_chain(
         vectorstore=vectorstore,
         model_name="gpt-4",
@@ -108,13 +108,13 @@ def process_query(query: Query):
     if not rag_chain:
         return {"error": "RAG chain not initialized."}
 
-    # Run the question through the chain
+    # running question through chain
     response = rag_chain.run(user_question)
 
     return {"question": user_question, "response": response}
 
 
-#endpoint to verify the service's working
+# endpoint to verify service is working
 @app.get("/")
 def read_root():
     return {"message": "RAG service is started!"}

@@ -24,7 +24,7 @@ db_connection_string = os.getenv("POSTGRESQL_URI")
 
 def get_db_connection():
     
-    #Returns a psycopg2 connection
+    # returns a psycopg2 connection
     
     engine = sqlalchemy.create_engine(db_connection_string)
     return engine.raw_connection()
@@ -40,7 +40,7 @@ def build_pgvector_store(
     max_rows: int = 2622712
 ):
     
-    # Creating embeddings instance and PGVector store object
+    # creating embeddings instance and PGVector store object
     embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
     vectorstore = PGVector(
         connection_string=connection_string,
