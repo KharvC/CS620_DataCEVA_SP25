@@ -68,14 +68,21 @@ Once in the chatbox, ask question related to your data (for example, how many sa
 
 #### Backend
 - **Login**: `auth.py`, `database.py`, `models.py`
-   - test
+   - handles the login and registering of new users.
 - **Vector embedding creation**: `embed.py`
+   - Creates a vector embedding table in the same database where data is stored.
 - **SQL + RAG**: `main.py`, `main_rag.py`
+   - Implements SQL retrieval using LLM and RAG model using vector embeddings 
+- **Dependencies**: `requirements.txt`
+   - Keeps track of dependencies used in backend
 
 #### Frontend
 - **Logic**: `App.jsx`
+   - Handles API calls and other logic to connect with the backend
 - **Styling**: `App.css`, `index.css`
+   - Styles the frontend
 - **Dependencies**: `package.json`
+   - Keeps track of dependencies used in frontend
 
 
 ## What Works and What Doesn't Work
