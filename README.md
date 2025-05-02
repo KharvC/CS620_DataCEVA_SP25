@@ -68,7 +68,7 @@ Once in the chatbox, ask question related to your data (for example, how many sa
 
 #### Backend
 - **Login**: `auth.py`, `database.py`, `models.py`
- - Testing
+   - test
 - **Vector embedding creation**: `embed.py`
 - **SQL + RAG**: `main.py`, `main_rag.py`
 
